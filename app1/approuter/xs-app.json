@@ -1,0 +1,22 @@
+{
+	"welcomeFile": "uimodule/index.html",
+	"authenticationMethod": "route",
+	"logout": {
+		"logoutEndpoint": "/do/logout"
+	},
+	"routes": [
+		{
+			"source": "^/uimodule/(.*)$",
+			"target": "$1",
+			"authenticationType": "xsuaa",
+			"localDir": "uimodule/webapp",
+			"scope": "$XSAPPNAME.Display"
+		},
+		{
+			"source": "^/employees/(.*)",
+			"destination": "urlBack",
+			"authenticationType": "xsuaa",
+			"scope": "$XSAPPNAME.Edit"
+		}
+	]
+}

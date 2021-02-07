@@ -1,0 +1,103 @@
+ID: Proyecto
+_schema-version: 3.2.0
+version: 0.0.1
+modules:
+  # APP FRONT 1
+  - name: App1
+    type: nodejs
+    path: app1/approuter
+    parameters:
+      disk-quota: 512M
+      memory: 512M
+      destinations:
+        - name: urlBack
+          type: HTTP
+          url: ~{urlBack/application-url}
+          proxy-type: Internet
+    requires:
+      - name: front_app1_destination
+      - name: urlBack
+      - name: aplicaciones_xsuaa
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:ui --prefix ..
+
+  # APP FRONT 2
+  - name: App2
+    type: nodejs
+    path: app2/approuter
+    parameters:
+      disk-quota: 512M
+      memory: 512M
+    requires:
+      - name: front_app2_destination
+      - name: aplicaciones_xsuaa
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:ui --prefix ..
+
+  # APP FRONT 3
+  - name: App3
+    type: nodejs
+    path: app3/approuter
+    parameters:
+      disk-quota: 512M
+      memory: 512M
+    requires:
+      - name: front_app3_destination
+      - name: aplicaciones_xsuaa
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:ui --prefix ..
+
+  #APP BACK
+  - name: server_xsjs
+    type: nodejs
+    path: ./server_xsjs
+    provides:
+      - name: urlBack
+        properties:
+          application-url: ${default-url}
+    parameters:
+      disk-quota: 1024M
+      memory: 512M
+    requires:
+      - name: aplicaciones_xsuaa
+      - name: app-bbdd
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+resources:
+  - name: aplicaciones_xsuaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./xs-security.json
+      service-plan: application
+      service: xsuaa
+  - name: app-bbdd
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-plan: hdi-shared
+      service: hana
+  - name: front_app1_destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: lite
+      service: destination
+  - name: front_app2_destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: lite
+      service: destination
+  - name: front_app3_destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: lite
+      service: destination

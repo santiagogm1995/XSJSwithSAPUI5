@@ -1,0 +1,15 @@
+{
+	"name": "test",
+	"version": "0.0.1",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"@sap/xsenv": "^2.0.0",
+		"@sap/xsjs": "^6.0.0",
+		"npm-run-all": "latest"
+	},
+	"devDependencies": {
+		"mbt": "^1.0.16"
+	}
+}
